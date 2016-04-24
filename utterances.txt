@@ -1,0 +1,2 @@
+HowManyPlayersIntent I'm playing with {numPlayers} players
+HowManyPlayersIntent {numPlayers}

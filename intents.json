@@ -1,0 +1,19 @@
+{
+
+  "intents": [
+
+    {
+
+      "intent": "HowManyPlayersIntent",
+      "slots": [
+        {
+          "name": "numPlayers",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+
+    }
+
+  ]
+
+}
