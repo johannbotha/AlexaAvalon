@@ -33,50 +33,22 @@ exports.handler = function (event, context) {
     }
 };
 
-/**
- * Called when the session starts.
- */
-function onSessionStarted (sessionStartedRequest, session) {}
 
-/**
- * Called when the user launches the skill without specifying what they want.
- */
 function onLaunch (launchRequest, session, callback) {
-
-    // Dispatch to your skill's launch.
     getWelcomeResponse(callback);
 }
 
-/**
- * Called when the user specifies an intent for this skill.
- */
 function onIntent (intentRequest, session, callback) {
 
     var intent = intentRequest.intent,
         intentName = intentRequest.intent.name;
 
-    console.log('*** in onIntent: intent name is: ' + intentName);
-    console.log('*** in onIntent: intent is: ' + JSON.stringify(intent));
-
-    // Dispatch to your skill's intent handlers
-    if ("AMAZON.HelpIntent" === intentName) {
-        getWelcomeResponse(callback);
-    } else if ("AMAZON.StopIntent" === intentName || "AMAZON.CancelIntent" === intentName) {
-        handleSessionEndRequest(callback);
-    } else if ("HowManyPlayersIntent" === intentName) {
+    if ("HowManyPlayersIntent" === intentName) {
         readScript(callback, intent);
     } else {
         throw "Invalid intent";
     }
 }
-
-/**
- * Called when the user ends the session.
- * Is not called when the skill returns shouldEndSession=true.
- */
-function onSessionEnded (sessionEndedRequest, session) {}
-
-// --------------- Functions that control the skill's behavior -----------------------
 
 function getWelcomeResponse (callback) {
 
@@ -96,18 +68,12 @@ function readScript (callback, intent) {
     var redPlayers;
 
     if (numPlayers == '5' || numPlayers == '6') {
-        console.log('****** 5 or 6 players');
-
         redPlayers = '2';
 
     } else if (numPlayers == '7' || numPlayers == '8' || numPlayers == '9') {
-        console.log('****** 7, 8, or 9 players');
-
         redPlayers = '3';
 
     } else if (numPlayers == '10') {
-        console.log('****** 10 players');
-
         redPlayers = '4';
 
     } else {
@@ -168,21 +134,6 @@ function readScript (callback, intent) {
     callback(sessionAttributes,
         buildSpeechletResponse(speechOutput, repromptText, shouldEndSession));
 }
-
-function handleSessionEndRequest (callback) {
-
-    console.log('******** Handling session end request')
-
-    var speechOutput = "<speak>Thank you for trying Avalon. May Merlin guide you.</speak>";
-    // Setting this to true ends the session and exits the skill.
-    var shouldEndSession = true;
-    var repromptText = "No";
-
-    callback({}, buildSpeechletResponse(speechOutput, repromptText, shouldEndSession));
-}
-
-
-// --------------- Helpers that build all of the responses -----------------------
 
 function buildSpeechletResponse (output, repromptText, shouldEndSession) {
     return {
